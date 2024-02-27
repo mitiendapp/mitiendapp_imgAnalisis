@@ -167,7 +167,7 @@ async function run(imageDataPath) {
   const text = response.text();
   console.log(text);
 }
-
+//hola
 function fileToGenerativePart(path, mimeType) {
   // Lee el archivo desde la ruta proporcionada
   return {
