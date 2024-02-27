@@ -127,6 +127,67 @@
 // });
 
 
+// const express = require('express');
+// const bodyParser = require('body-parser');
+// const { GoogleGenerativeAI } = require("@google/generative-ai");
+// const fs = require("fs");
+// const { API_KEY_GEMINI } = require('./config')
+
+// const genAI = new GoogleGenerativeAI(API_KEY_GEMINI);
+// const app = express();
+
+// app.use(bodyParser.json());
+
+// app.post('/process-image', async (req, res) => {
+//   try {
+//     const imageDataPath = req.body.imagePath;
+//     if (!imageDataPath) {
+//       return res.status(400).json({ error: 'Image path is required' });
+//     }
+
+//     const resultText = await run(imageDataPath);
+//     res.json({ result: resultText });
+//   } catch (error) {
+//     console.error('Error processing image:', error);
+//     res.status(500).json({ error: 'Internal server error' });
+//   }
+// });
+
+// async function run(imageDataPath) {
+//   const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
+//   const objeto = "";
+//   const prompt = `Responde con Sí es una imagen es inapropiada o con No en caso de que la image sea apropiada y no tenga contenido explicito el objeto por el que te preguntan. ¿En la imagen hay un ${objeto} de estas caracterisiticas?`;
+
+//   const imageParts = [
+//     fileToGenerativePart(imageDataPath,"image/jpeg")
+//   ];
+
+//   const result = await model.generateContent([prompt, ...imageParts]);
+//   const response = await result.response;
+//   const text = response.text();
+//   console.log(text);
+// }
+// //hola
+// function fileToGenerativePart(path, mimeType) {
+//   // Lee el archivo desde la ruta proporcionada
+//   return {
+//     inlineData: {
+//       data: Buffer.from(fs.readFileSync(path)).toString("base64"),
+//       mimeType
+//     },
+//   };
+// }
+
+// const PORT = 3000;
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });
+
+
+
+//------------------------------------
+
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
@@ -146,7 +207,7 @@ app.post('/process-image', async (req, res) => {
     }
 
     const resultText = await run(imageDataPath);
-    res.json({ result: resultText });
+    res.json({ result: resultText }); // Devuelve el resultado en el JSON de la respuesta
   } catch (error) {
     console.error('Error processing image:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -156,18 +217,19 @@ app.post('/process-image', async (req, res) => {
 async function run(imageDataPath) {
   const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
   const objeto = "";
-  const prompt = `Responde con Sí es una imagen es inapropiada o con No en caso de que la image sea apropiada y no tenga contenido explicito el objeto por el que te preguntan. ¿En la imagen hay un ${objeto} de estas caracterisiticas?`;
+  const prompt = `Responde con Sí si la imagen contiene un ${objeto} de estas características, o con No si la imagen es apropiada y no tiene contenido explícito.`;
 
   const imageParts = [
-    fileToGenerativePart(imageDataPath,"image/jpeg")
+    fileToGenerativePart(imageDataPath, "image/jpeg")
   ];
 
   const result = await model.generateContent([prompt, ...imageParts]);
   const response = await result.response;
-  const text = response.text();
+  const text = await response.text(); // Espera a que se resuelva la promesa
   console.log(text);
+  return text; // Devuelve el texto obtenido
 }
-//hola
+
 function fileToGenerativePart(path, mimeType) {
   // Lee el archivo desde la ruta proporcionada
   return {
@@ -178,7 +240,7 @@ function fileToGenerativePart(path, mimeType) {
   };
 }
 
-const PORT = 3000;
+const PORT = 3100;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
