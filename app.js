@@ -225,8 +225,7 @@ async function run(imageDataPath) {
       data:imageDataPath,
       mimeType:"image/jpeg"
     },
-  };
-  ];
+  }];
 
   const result = await model.generateContent([prompt, ...imageParts]);
   const response = await result.response;
