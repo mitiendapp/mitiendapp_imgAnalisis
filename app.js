@@ -217,10 +217,15 @@ app.post('/process-image', async (req, res) => {
 async function run(imageDataPath) {
   const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
   const objeto = "";
-  const prompt = `Responde con Sí si la imagen contiene un ${objeto} de estas características, o con No si la imagen es apropiada y no tiene contenido explícito.`;
+  const prompt = `Responde con Sí es una imagen es inapropiada o con No en caso de que la image sea apropiada y no tenga contenido explicito el objeto por el que te preguntan. ¿En la imagen hay un ${objeto} de estas caracterisiticas?`;
 
   const imageParts = [
-    fileToGenerativePart(imageDataPath, "image/jpeg")
+   {
+    inlineData: {
+      data:imageDataPath,
+      mimeType:image/jpeg
+    },
+  };
   ];
 
   const result = await model.generateContent([prompt, ...imageParts]);
@@ -230,15 +235,15 @@ async function run(imageDataPath) {
   return text; // Devuelve el texto obtenido
 }
 
-function fileToGenerativePart(path, mimeType) {
+/*function fileToGenerativePart(path, mimeType) {
   // Lee el archivo desde la ruta proporcionada
   return {
     inlineData: {
-      data: Buffer.from(fs.readFileSync(path)).toString("base64"),
-      mimeType
+      data:imageDataPath,
+      mimeType:image/jpeg
     },
   };
-}
+}*/
 
 const PORT = 3100;
 app.listen(PORT, () => {
