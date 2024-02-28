@@ -193,7 +193,7 @@ const bodyParser = require('body-parser');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const fs = require("fs");
 const { API_KEY_GEMINI } = require('./config')
-const {cors} = require ('cors')
+const cors = require('cors');
 const genAI = new GoogleGenerativeAI(API_KEY_GEMINI);
 const app = express();
 
