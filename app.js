@@ -223,7 +223,7 @@ async function run(imageDataPath) {
    {
     inlineData: {
       data:imageDataPath,
-      mimeType:image/jpeg
+      mimeType:"image/jpeg"
     },
   };
   ];
