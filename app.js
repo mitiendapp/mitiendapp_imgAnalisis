@@ -193,11 +193,17 @@ const bodyParser = require('body-parser');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const fs = require("fs");
 const { API_KEY_GEMINI } = require('./config')
-
+const {cors} = require ('cors')
 const genAI = new GoogleGenerativeAI(API_KEY_GEMINI);
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cors())
+app.use((err, req, res, next) => {
+  res.status(500).json({
+      message: err.message
+  });
+});
 
 app.post('/process-image', async (req, res) => {
   try {
